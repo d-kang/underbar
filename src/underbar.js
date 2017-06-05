@@ -193,28 +193,29 @@
   };
 
   // Determine if the array or object contains a given value (using `===`).
-  _.contains = function(collection, target) {
+  _.contains = (collection, target) => (
     // TIP: Many iteration problems can be most easily expressed in
     // terms of reduce(). Here's a freebie to demonstrate!
-    return _.reduce(collection, function(wasFound, item) {
-      if (wasFound) {
-        return true;
-      }
-      return item === target;
-    }, false);
-  };
+    _.reduce(collection, (wasFound, item) => (
+      wasFound ? true : item === target
+    ), false)
+  );
 
 
   // Determine whether all of the elements match a truth test.
-  _.every = function(collection, iterator) {
+  _.every = (collection, iterator=_.identity) => (
     // TIP: Try re-using reduce() here.
-  };
+    _.reduce(collection, (acc, item, index, coll) => (
+      !acc ? false : !!iterator(item)
+    ), true)
+  );
 
   // Determine whether any of the elements pass a truth test. If no iterator is
   // provided, provide a default one
-  _.some = function(collection, iterator) {
+  _.some = (collection, iterator=_.identity) => (
     // TIP: There's a very clever way to re-use every() here.
-  };
+    !_.every( collection, (item) => !iterator(item) )
+  );
 
 
   /**
@@ -235,13 +236,25 @@
   //   }, {
   //     bla: "even more stuff"
   //   }); // obj1 now contains key1, key2, key3 and bla
-  _.extend = function(obj) {
+  _.extend = (obj1, ...rest) => {
+    _.each(rest, (obj) => (
+      _.each(obj, (val, key) => obj1[key] = val)
+    ));
+    return obj1;
   };
 
   // Like extend, but doesn't ever overwrite a key that already
   // exists in obj
-  _.defaults = function(obj) {
-  };
+  _.defaults = (obj1, ...rest) => {
+    _.each(rest, (obj) => (
+      _.each(obj, (val, key) => {
+        if (!(key in obj1))  {
+          obj1[key] = val
+        }
+      })
+    ));
+    return obj1;
+  };      
 
 
   /**
