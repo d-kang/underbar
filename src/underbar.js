@@ -298,7 +298,6 @@
   // instead if possible.
   _.memoize = (func) => {
     const memo = {};
-
     return (...args) => {
       if (!memo.hasOwnProperty(...args)) {
         memo[args] = func(...args);
@@ -313,10 +312,7 @@
   // The arguments for the original function are passed after the wait
   // parameter. For example _.delay(someFunction, 500, 'a', 'b') will
   // call someFunction('a', 'b') after 500ms
-  _.delay = function(func, wait, ...args) {
-    setTimeout(func, wait, ...args);
-  };
-
+  _.delay = (func, wait, ...args) => setTimeout(func, wait, ...args);
 
   /**
    * ADVANCED COLLECTION OPERATIONS
@@ -334,7 +330,6 @@
       return prev;
     }, [])
   );
-
 
   /**
    * ADVANCED
