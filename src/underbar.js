@@ -254,7 +254,7 @@
       })
     ));
     return obj1;
-  };      
+  };
 
 
   /**
@@ -276,11 +276,11 @@
 
     // TIP: We'll return a new function that delegates to the old one, but only
     // if it hasn't been called before.
-    return function() {
+    return function(...args) {
       if (!alreadyCalled) {
         // TIP: .apply(this, arguments) is the standard way to pass on all of the
         // infromation from one function call to another.
-        result = func.apply(this, arguments);
+        result = func(...args);
         alreadyCalled = true;
       }
       // The new function always returns the originally computed result.
@@ -296,7 +296,15 @@
   // _.memoize should return a function that, when called, will check if it has
   // already computed the result for the given argument and return that value
   // instead if possible.
-  _.memoize = function(func) {
+  _.memoize = (func) => {
+    const memo = {};
+
+    return (...args) => {
+      if (!memo.hasOwnProperty(...args)) {
+        memo[args] = func(...args);
+      }
+      return memo[args];
+    }
   };
 
   // Delays a function for the given number of milliseconds, and then calls
@@ -305,7 +313,8 @@
   // The arguments for the original function are passed after the wait
   // parameter. For example _.delay(someFunction, 500, 'a', 'b') will
   // call someFunction('a', 'b') after 500ms
-  _.delay = function(func, wait) {
+  _.delay = function(func, wait, ...args) {
+    setTimeout(func, wait, ...args);
   };
 
 
@@ -319,8 +328,12 @@
   // TIP: This function's test suite will ask that you not modify the original
   // input array. For a tip on how to make a copy of an array, see:
   // http://mdn.io/Array.prototype.slice
-  _.shuffle = function(array) {
-  };
+  _.shuffle = (array) => (
+    _.reduce(array, (prev, next) => {
+      Math.random() > 0.5 ? prev.unshift(next) : prev.push(next);
+      return prev;
+    }, [])
+  );
 
 
   /**
