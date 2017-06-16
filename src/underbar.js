@@ -29,21 +29,19 @@
 
   // Return an array of the first n elements of an array. If n is undefined,
   // return just the first element.
-  _.first = (array, n) => (
+  _.first = (array, n) =>
     n === undefined
     ? array[0]
-    : array.slice(0, n)
-  );
+    : array.slice(0, n);
 
   // Like first, but for the last elements. If n is undefined, return just the
   // last element.
-  _.last = (array, n) => (
+  _.last = (array, n) =>
     n === undefined
     ? array.pop()
     : n > array.length
     ? array
-    : array.splice(array.length - n)
-  );
+    : array.splice(array.length - n);
 
   // Call iterator(value, key, collection) for each element of collection.
   // Accepts both arrays and objects.
@@ -193,29 +191,27 @@
   };
 
   // Determine if the array or object contains a given value (using `===`).
-  _.contains = (collection, target) => (
+  _.contains = (collection, target) =>
     // TIP: Many iteration problems can be most easily expressed in
     // terms of reduce(). Here's a freebie to demonstrate!
     _.reduce(collection, (wasFound, item) => (
       wasFound ? true : item === target
-    ), false)
-  );
+    ), false);
 
 
   // Determine whether all of the elements match a truth test.
-  _.every = (collection, iterator=_.identity) => (
+  _.every = (collection, iterator=_.identity) =>
     // TIP: Try re-using reduce() here.
     _.reduce(collection, (acc, item, index, coll) => (
       !acc ? false : !!iterator(item)
-    ), true)
-  );
+    ), true);
+
 
   // Determine whether any of the elements pass a truth test. If no iterator is
   // provided, provide a default one
-  _.some = (collection, iterator=_.identity) => (
+  _.some = (collection, iterator=_.identity) =>
     // TIP: There's a very clever way to re-use every() here.
-    !_.every( collection, (item) => !iterator(item) )
-  );
+    !_.every( collection, (item) => !iterator(item) );
 
 
   /**
@@ -271,21 +267,15 @@
     // TIP: These variables are stored in a "closure scope" (worth researching),
     // so that they'll remain available to the newly-generated function every
     // time it's called.
-    var alreadyCalled = false;
-    var result;
+    let alreadyCalled = false;
+    let result;
 
     // TIP: We'll return a new function that delegates to the old one, but only
     // if it hasn't been called before.
-    return function(...args) {
-      if (!alreadyCalled) {
-        // TIP: .apply(this, arguments) is the standard way to pass on all of the
-        // infromation from one function call to another.
-        result = func(...args);
-        alreadyCalled = true;
-      }
-      // The new function always returns the originally computed result.
-      return result;
-    };
+    return (...args) =>
+      !alreadyCalled ?
+      (alreadyCalled = true, result = func(...args))
+      : result;
   };
 
   // Memorize an expensive function's results by storing them. You may assume
