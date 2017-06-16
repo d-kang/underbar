@@ -291,8 +291,8 @@
     return (...args) => {
       const arg = args.join(':');
       return memo.hasOwnProperty(arg)
-      ? (console.log('get memo'), memo[arg])
-      : (console.log('set memo'), memo[arg] = fib(...args));
+      ? memo[arg]
+      : memo[arg] = fib(...args);
     }
   };
   _.fib = (n=-1) => {
@@ -312,13 +312,13 @@
   // call someFunction('a', 'b') after 500ms
   _.delay = function(func, wait, ...args) {
     // setTimeout(func, wait, ...args);
-    setTimeout( ()=>func(args), wait);
+    setTimeout( ()=>func(...args), wait);
   }
-  _.foo = (self, args) => {
+  _.foo = function(...args) {
     const [a, b] = args;
     alert( a + ' ' + b );
   }
-  _.delay(_.foo, 3000, 'David', 'Kang')
+  // _.delay(_.foo, 3000, 'David', 'Kang')
 
   /**
    * ADVANCED COLLECTION OPERATIONS
@@ -330,12 +330,11 @@
   // TIP: This function's test suite will ask that you not modify the original
   // input array. For a tip on how to make a copy of an array, see:
   // http://mdn.io/Array.prototype.slice
-  _.shuffle = (array) => (
+  _.shuffle = (array) =>
     _.reduce(array, (prev, next) => {
       Math.random() > 0.5 ? prev.unshift(next) : prev.push(next);
       return prev;
-    }, [])
-  );
+    }, []);
 
   /**
    * ADVANCED
@@ -347,9 +346,20 @@
 
   // Calls the method named by functionOrKey on each value in the list.
   // Note: You will need to learn a bit about .apply to complete this.
-  _.invoke = function(collection, functionOrKey, args) {
+  _.invoke = function(coll, funcOrKey) {
+    // var [dog, cat] = collection;
+    console.log('funcOrKey', funcOrKey);
+    if (typeof funcOrKey === 'string') {
+      return _.map(coll, (a) => a[funcOrKey]())
+    }
+    return _.map(coll, a => funcOrKey.call(a))
   };
 
+  _.reverse = function(){
+    return this.split('').reverse().join('');
+  };
+
+  _.invoke(['dog', 'cat'], _.reverse);
   // Sort the object's values by a criterion produced by an iterator.
   // If iterator is a string, sort objects by that property with the name
   // of that string. For example, _.sortBy(people, 'name') should sort
