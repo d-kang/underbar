@@ -346,13 +346,9 @@
 
   // Calls the method named by functionOrKey on each value in the list.
   // Note: You will need to learn a bit about .apply to complete this.
-  _.invoke = function(coll, funcOrKey) {
-    // var [dog, cat] = collection;
-    console.log('funcOrKey', funcOrKey);
-    if (typeof funcOrKey === 'string') {
-      return _.map(coll, (a) => a[funcOrKey]())
-    }
-    return _.map(coll, a => funcOrKey.call(a))
+  _.invoke = (coll, funcOrKey) => {
+    var isFunc = typeof funcOrKey === 'function';
+    return _.map(coll, (a) => isFunc ? funcOrKey.call(a) : a[funcOrKey]())
   };
 
   _.reverse = function(){
