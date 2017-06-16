@@ -286,15 +286,23 @@
   // _.memoize should return a function that, when called, will check if it has
   // already computed the result for the given argument and return that value
   // instead if possible.
-  _.memoize = (func) => {
+  _.memoize = function(fib) {
     const memo = {};
     return (...args) => {
-      if (!memo.hasOwnProperty(...args)) {
-        memo[args] = func(...args);
-      }
-      return memo[args];
+      const arg = args.join(':');
+      return memo.hasOwnProperty(arg)
+      ? (console.log('get memo'), memo[arg])
+      : (console.log('set memo'), memo[arg] = fib(...args));
     }
   };
+  _.fib = (n=-1) => {
+    return n < 2 ? n : _.fib(n - 1) + _.fib(n - 2);
+  };
+  _.fibonize = _.memoize(_.fib);
+  // _.fibonize(5, 0); // set
+  // _.fibonize(5, 0); // get
+  // _.fibonize(6, 0); // set
+  // _.fibonize(6, 0); // get
 
   // Delays a function for the given number of milliseconds, and then calls
   // it with the arguments supplied.
